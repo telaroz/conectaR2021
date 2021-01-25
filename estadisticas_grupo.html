@@ -13,7 +13,7 @@
 <meta name="author" content="Valery Zuniga Kondrashov" />
 
 
-<title>Estadísticas de grupo rápidas: Cómo sacar el máximo provecho del paquete data.tablee</title>
+<title>Estadísticas de grupo rápidas: Cómo sacar el máximo provecho del paquete data.table</title>
 
 <script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
 // v0.0.1
@@ -143,7 +143,7 @@ a.sourceLine {
 
 
 <section class="page-header">
-<h1 class="title toc-ignore project-name">Estadísticas de grupo rápidas: Cómo sacar el máximo provecho del paquete data.tablee</h1>
+<h1 class="title toc-ignore project-name">Estadísticas de grupo rápidas: Cómo sacar el máximo provecho del paquete data.table</h1>
 <h4 class="author project-author">Valery Zuniga Kondrashov</h4>
 </section>
 
@@ -411,12 +411,12 @@ ATL
 <p>Observamos que la opción con <code>data.table</code> es alrededor de 3 veces más rápida para calcular todos nuestros resúmenes.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>tictoc<span class="op">::</span><span class="kw">tic</span>()</span>
 <span id="cb7-2"><a href="#cb7-2"></a></span>
-<span id="cb7-3"><a href="#cb7-3"></a>res_dplyr_<span class="dv">1</span> &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(combinaciones[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], dplyr_<span class="dv">1</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a>res_dplyr_<span class="dv">1</span> &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(combinaciones, dplyr_<span class="dv">1</span>)</span>
 <span id="cb7-4"><a href="#cb7-4"></a>tiempo_dplyr &lt;-<span class="st"> </span>tictoc<span class="op">::</span><span class="kw">toc</span>(<span class="dt">quiet =</span> <span class="ot">TRUE</span>)</span>
 <span id="cb7-5"><a href="#cb7-5"></a></span>
 <span id="cb7-6"><a href="#cb7-6"></a>tictoc<span class="op">::</span><span class="kw">tic</span>()</span>
 <span id="cb7-7"><a href="#cb7-7"></a></span>
-<span id="cb7-8"><a href="#cb7-8"></a>res_dt_<span class="dv">1</span> &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(combinaciones[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], dt_<span class="dv">1</span>)</span>
+<span id="cb7-8"><a href="#cb7-8"></a>res_dt_<span class="dv">1</span> &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(combinaciones, dt_<span class="dv">1</span>)</span>
 <span id="cb7-9"><a href="#cb7-9"></a>tiempo_dt &lt;-<span class="st"> </span>tictoc<span class="op">::</span><span class="kw">toc</span>(<span class="dt">quiet =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <table>
 <thead>
@@ -432,10 +432,10 @@ tiempo_dt
 <tbody>
 <tr>
 <td style="text-align:right;">
-0.05
+29.54
 </td>
 <td style="text-align:right;">
-0.04
+12.55
 </td>
 </tr>
 </tbody>
@@ -545,7 +545,7 @@ tail
 <span id="cb10-8"><a href="#cb10-8"></a>tictoc<span class="op">::</span><span class="kw">tic</span>()</span>
 <span id="cb10-9"><a href="#cb10-9"></a>data.table<span class="op">::</span><span class="kw">setkey</span>(data, aerolinea)</span>
 <span id="cb10-10"><a href="#cb10-10"></a></span>
-<span id="cb10-11"><a href="#cb10-11"></a>res_dt_<span class="dv">3</span> &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(combinaciones[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], dt_<span class="dv">3</span>)</span>
+<span id="cb10-11"><a href="#cb10-11"></a>res_dt_<span class="dv">3</span> &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(combinaciones, dt_<span class="dv">3</span>)</span>
 <span id="cb10-12"><a href="#cb10-12"></a>tiempo_dt_<span class="dv">3</span> &lt;-<span class="st"> </span>tictoc<span class="op">::</span><span class="kw">toc</span>(<span class="dt">quiet =</span> <span class="ot">TRUE</span>)</span>
 <span id="cb10-13"><a href="#cb10-13"></a></span>
 <span id="cb10-14"><a href="#cb10-14"></a>kableExtra<span class="op">::</span><span class="kw">kable</span>(data.table<span class="op">::</span><span class="kw">data.table</span>(</span>
@@ -566,10 +566,10 @@ tiempo_dt_3
 <tbody>
 <tr>
 <td style="text-align:right;">
-0.04
+12.55
 </td>
 <td style="text-align:right;">
-0.03
+10.28
 </td>
 </tr>
 </tbody>
