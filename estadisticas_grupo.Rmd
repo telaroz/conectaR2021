@@ -1,5 +1,5 @@
 ---
-title: "Estadísticas de grupo rápidas: \t Cómo sacar el máximo provecho del paquete data.table para hacer una gran cantidad de resúmenes de datos lo más rápido posible"
+title: "Estadísticas de grupo rápidas: \t Cómo sacar el máximo provecho del paquete data.tablee"
 author: "Valery Zuniga Kondrashov"
 output:  
   prettydoc::html_pretty:
