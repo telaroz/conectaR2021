@@ -1,42 +1,9 @@
 ---
 title: "Estadísticas de grupo rápidas: \t Cómo sacar el máximo provecho del paquete data.table para hacer una gran cantidad de resúmenes de datos lo más rápido posible"
 author: "Valery Zuniga Kondrashov"
-output: posterdown::posterdown_html
-
-
-#----FONT STYLE----#
-font_size: "30pt" #sets '\normalsize' (sizes of the title and sections headings will adjust based on it)
-font_family: "palatino" # choose from typical latex fonts (example: "palatino")
-
-#----COLOURS----#
-
-#Background/ Line Colours
-title_bgcol: "white"  #Hex colour for background of poster title section (default is blue)
-poster_bgcol: "ffffff" #colour of the poster main background
-cite_col: "CC0000" #colour of ciation elements
-url_col: "008080" #colour of url links
-link_col: "008080" #colour of other links within the poster
-columnline_col: "0b4545" #colour 
-header_bgcol: "008080"
-
-#Text Colours
-title_textcol: "white" #colour of title text
-author_textcol: "008080" # Colour of author text
-affiliation_textcol: "FFFFFF" # Colour of affiliation text
-body_textcol: "000000" # Colour of main text in the body of poster
-header_textcol: "CC0000" # Colour of the poster header titles
-footnote_textcol: "FFFFFF" # Colour of footnote text if used
-
-#----POSTER SIZE & COLUMN FORMATTING----#
-poster_height: "38in" # height in inches of poster
-poster_width: "45in" # width in inches of poster
-column_numbers: 4 # Number of columns that the poster has
-column_margins: "10mm" # Margin spacing for columns
-
-#---BIBLIOGRAPHY OPTIONS---#
-bibliography: MyLibrary.bib # name of the .bib file used for referencing
-bibliography_spacing: 0.8 # sets the multiplier for line spacing of bibliography spacing (between 0 and 1)
-bibliography_textsize: "small"  # size of the bibliography text size (handy for one too many references!)
+output:  
+  prettydoc::html_pretty:
+    theme: cayman
 
 ---
 
@@ -51,10 +18,14 @@ data <- flights[!is.na(dep_delay) & !is.na(arr_delay),
                 .(destino = dest, atraso = arr_delay,
                   aerolinea = carrier)]
 
-knitr::kable(head(data, 4), format = 'html') 
+
 
 ```
 
+
+```{r, echo = FALSE}
+knitr::kable(head(data, 4), format = 'html') 
+```
 
 Problema a resolver:
 
@@ -65,18 +36,20 @@ Un caso de uso para calcular estas combinaciones, sería buscar una diversificac
 
 # Cálculo de combinaciones
 
-Con la función combn, generamos todas las combinaciones de 4 aerolíneas. Obtenemos una lista con 1820. Con esta estructura podremos apalancarnos de la funciones de `purrr` (o en R base la familia de funciones *apply) 
+Con la función combn, generamos todas las combinaciones de 4 aerolíneas. Obtenemos una lista con 1820 elementos. Con esta estructura podremos apalancarnos de la funciones de `purrr` (o en R base la familia de funciones *apply) 
 
 ```{r}
-combinaciones <- combn(unique(data$aerolinea), m = 4,
+combinaciones <- combn(x = unique(data$aerolinea), 
+                       m = 4,
                        simplify = FALSE)
-
-kableExtra::kable(
-  data.table::transpose(combinaciones[1:3]),
-  col.names = NULL)
 
 ```
 
+```{r, echo = FALSE}
+kableExtra::kable(
+  data.table::transpose(combinaciones[1:3]),
+  col.names = NULL)
+```
 
 Ahora, creamos las funciones que reciben una de las combinaciones calculadas y devuelve el resumen deseado para esta combinación.
 Acá tenemos 2 opciones: un resumen con dplyr y su equivalente en data.table. 
@@ -114,10 +87,8 @@ resultados_dt <- dt_1(combinaciones[[1]])[
 kableExtra::kable(head(resultados_dt, 4))
 
 all.equal(data.table::as.data.table(resultados_dplyr),
-          resultados_dt) %>% 
-  kableExtra::kable(col.names = NULL)
+          resultados_dt)
 ```
-
 
 
 Calculamos cuánto duran los cálculos hechos de manera secuencial con ambos métodos:
@@ -138,10 +109,12 @@ res_dt_1 <- purrr::map(combinaciones[1:2], dt_1)
 tiempo_dt <- tictoc::toc(quiet = TRUE)
 
 
+```
+
+```{r, echo = FALSE}
 kableExtra::kable(data.table::data.table(
   tiempo_dplyr = tiempo_dplyr$toc - tiempo_dplyr$tic, 
   tiempo_dt = tiempo_dt$toc -tiempo_dt$tic))
-
 ```
 
 
@@ -171,7 +144,7 @@ En vez de utilizar las funciones $mean$ y $var$ de R base, `data.table` utiliza 
 Las siguientes funciones están internamente optimizadas: 
 
 
-```{r}
+```{r, echo = FALSE}
 data.table::data.table(
   ` ` = c('min', 'max', 'mean', 'median', '.N'),
   ` ` = c('var', 'sd', 'sum', 'prod', ''),
