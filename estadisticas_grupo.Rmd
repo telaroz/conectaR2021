@@ -51,7 +51,7 @@ data <- flights[!is.na(dep_delay) & !is.na(arr_delay),
                 .(destino = dest, atraso = arr_delay,
                   aerolinea = carrier)]
 
-knitr::kable(head(data), format = 'html') 
+knitr::kable(head(data, 4), format = 'html') 
 
 ```
 
@@ -91,7 +91,6 @@ dplyr_1 <- function(combinacion){
     dplyr::summarise(media = mean(atraso),
                      varianza = var(atraso))
 }
-
 dt_1 <- function(combinacion){
   data[aerolinea %chin% combinacion,
        .(media = mean(atraso),
@@ -112,7 +111,7 @@ resultados_dplyr <- dplyr_1(combinaciones[[1]]) %>%
 resultados_dt <- dt_1(combinaciones[[1]])[
   order(destino)]
 
-kableExtra::kable(head(resultados_dt))
+kableExtra::kable(head(resultados_dt, 4))
 
 all.equal(data.table::as.data.table(resultados_dplyr),
           resultados_dt) %>% 
@@ -130,12 +129,12 @@ Observamos que la opción con `data.table` es alrededor de 3 veces más rápida 
 ```{r}
 tictoc::tic()
 
-res_dplyr_1 <- purrr::map(combinaciones, dplyr_1)
+res_dplyr_1 <- purrr::map(combinaciones[1:2], dplyr_1)
 tiempo_dplyr <- tictoc::toc(quiet = TRUE)
 
 tictoc::tic()
 
-res_dt_1 <- purrr::map(combinaciones, dt_1)
+res_dt_1 <- purrr::map(combinaciones[1:2], dt_1)
 tiempo_dt <- tictoc::toc(quiet = TRUE)
 
 
@@ -207,7 +206,7 @@ dplyr tiene su equivalente llamado [Hybrid Evaluation](https://dplyr.tidyverse.o
 ```{r}
 
 dt_3 <- function(combinacion){
-  data[.(combinacion), # Filtro con la aerolínea indexada
+  data[.(combinacion), # Filtro a la aerolínea
        .(media = mean(atraso),
          varianza = var(atraso)),
        by = 'destino']
@@ -216,9 +215,8 @@ dt_3 <- function(combinacion){
 tictoc::tic()
 data.table::setkey(data, aerolinea)
 
-res_dt_3 <- purrr::map(combinaciones, dt_3)
+res_dt_3 <- purrr::map(combinaciones[1:2], dt_3)
 tiempo_dt_3 <- tictoc::toc(quiet = TRUE)
-
 
 kableExtra::kable(data.table::data.table(
   tiempo_dt = tiempo_dt$toc -tiempo_dt$tic,
@@ -233,6 +231,7 @@ Vemos que hemos optimizado nuestros resúmenes aun más. Además, podríamos par
 # Referencias
 
 Glasman, Brodie _A strategy for faster group statistics_ <https://www.brodieg.com/2019/02/24/a-strategy-for-faster-group-statisitics/>
-Gorecki, Jan _Optimizations in data.table_ <https://jangorecki.gitlab.io/data.table/library/data.table/html/datatable-optimize.html>
+
+  Gorecki, Jan _Optimizations in data.table_ <https://jangorecki.gitlab.io/data.table/library/data.table/html/datatable-optimize.html>
 
 \small\printbibliography
