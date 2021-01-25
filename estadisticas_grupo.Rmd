@@ -203,8 +203,10 @@ Vemos que hemos optimizado nuestros resúmenes aun más. Además, podríamos par
 
 # Referencias
 
-Glasman, Brodie _A strategy for faster group statistics_ <https://www.brodieg.com/2019/02/24/a-strategy-for-faster-group-statisitics/>
+  Glasman, Brodie _A strategy for faster group statistics_ 
+<https://www.brodieg.com/2019/02/24/a-strategy-for-faster-group-statisitics/>
 
-  Gorecki, Jan _Optimizations in data.table_ <https://jangorecki.gitlab.io/data.table/library/data.table/html/datatable-optimize.html>
 
-\small\printbibliography
+  Gorecki, Jan _Optimizations in data.table_ 
+<https://jangorecki.gitlab.io/data.table/library/data.table/html/datatable-optimize.html>
+
